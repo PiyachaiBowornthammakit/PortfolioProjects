@@ -1,5 +1,3 @@
-Tableau Dashboard : https://public.tableau.com/views/CovidDashboard_16868233785950/Dashboard1?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link
-
 -- First record coronavirus infected in thailand
 SELECT
 	TOP 1 date,
