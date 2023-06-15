@@ -130,8 +130,8 @@ SELECT *,
 	(total_new_vaccinations/population)*100 AS percentage_new_vaccine
 FROM thailand_vac;
 
-
---1
+-- Query Dashboard for Tableau Public
+--Table 1
 Select
 	location,
 	SUM(new_cases) as total_cases,
@@ -143,25 +143,31 @@ where continent is not null
 Group By location
 order by 1,2,3
 
---2
-Select location, SUM(cast(new_deaths as int)) as TotalDeathCount
+--Table 2
+Select 
+	location,
+	SUM(cast(new_deaths as int)) as TotalDeathCount
 From Project..CovidDeaths
---Where location like '%states%'
 Where continent is null 
 and location not in ('World', 'European Union', 'International')
 Group by location
 order by TotalDeathCount desc
 
---3
-Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+--Table 3
+Select 
+	Location,
+	Population,
+	MAX(total_cases) as HighestInfectionCount,
+	Max((total_cases/population))*100 as PercentPopulationInfected
 From Project..CovidDeaths
---Where location like '%states%'
 Group by Location, Population
 order by PercentPopulationInfected desc
 
---4
-Select Location, Population,date, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+--Table 4
+Select 
+	Location,
+	Population,date, MAX(total_cases) as HighestInfectionCount,
+	Max((total_cases/population))*100 as PercentPopulationInfected
 From Project..CovidDeaths
---Where location like '%states%'
 Group by Location, Population, date
 order by PercentPopulationInfected desc
