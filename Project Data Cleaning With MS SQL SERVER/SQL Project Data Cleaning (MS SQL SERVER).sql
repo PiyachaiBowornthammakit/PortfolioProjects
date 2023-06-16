@@ -123,7 +123,7 @@ FROM Project..NashvilleHousing
 
 ------------------------------------------------------------------
 --Change Y and N to Yes and No in "Sold as Vacant" field
---use DISTINCT() and COUNT() to check value, now i have N, Y, Yes, No
+--use DISTINCT() and COUNT() to check value and group by
 SELECT
 	DISTINCT(SoldAsVacant),
 	COUNT(SoldASVacant)
