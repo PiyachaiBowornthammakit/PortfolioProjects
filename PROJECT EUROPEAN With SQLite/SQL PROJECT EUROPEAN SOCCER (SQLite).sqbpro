@@ -1,159 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Acer/Downloads/database.sqlite" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="29948"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,7:mainCountry"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Country" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="96"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- list of countries
 
 SELECT *
-
 FROM Country;
-
-
 
 -- list of leagues and their country
 
 SELECT
-
 	League.id AS Id,
-
-    League.name AS League_name,
-
-    Country.name AS Country
-
+	League.name AS League_name,
+	Country.name AS Country
 FROM League
-
 JOIN Country ON Country.id = League.id;
 
 
 
 -- list of teams
-
 SELECT *
-
 FROM Team
-
 ORDER BY team_long_name
-
 LIMIT 10;
-
-
 
 -- list of match in England
 
 SELECT
-
 	Match.id,
-
-    Country.name AS Country_name,
-
-    League.name AS League_name,
-
-    season,
-
-    stage,
-
-    date,
-
-    home_team.team_long_name AS home_team,
-
-    away_team.team_long_name AS away_team,
-
-    home_team_goal,
-
-    away_team_goal
-
+	Country.name AS Country_name,
+	League.name AS League_name,
+	season,
+	stage,
+	date,
+	home_team.team_long_name AS home_team,
+	away_team.team_long_name AS away_team,
+	home_team_goal,
+	away_team_goal
 FROM Match
-
 JOIN Country ON Country.id = Match.country_id
-
 JOIN League ON League.id = Match.league_id
-
 LEFT JOIN Team AS home_team ON home_team.team_api_id = Match.home_team_api_id
-
 LEFT JOIN Team AS away_team ON away_team.team_api_id = Match.away_team_api_id
-
 WHERE Country_name = 'England'
-
 ORDER BY date
-
 LIMIT 10;
 
 
-
 -- English League Match Totals and Averages
-
 SELECT
-
 	Country.name AS Country_name,
-
-    League.name AS League_name,
-
-    season,
-
-    COUNT(DISTINCT stage) AS number_of_state,
-
-    COUNT(DISTINCT home_team.team_long_name) AS number_of_team,
-
-    ROUND(AVG(home_team_goal),2) AS avg_home_team_goal,
-
-    ROUND(AVG(away_team_goal),2) AS avg_away_team_goal,
-
-    ROUND(AVG(home_team_goal - away_team_goal),2) AS avg_goal_dif,
-
-    ROUND(AVG(home_team_goal + away_team_goal),2) AS avg_goals,
-
-    SUM(home_team_goal + away_team_goal) AS total_goals
-
+	League.name AS League_name,
+	season,
+	COUNT(DISTINCT stage) AS number_of_state,
+	COUNT(DISTINCT home_team.team_long_name) AS number_of_team,
+	ROUND(AVG(home_team_goal),2) AS avg_home_team_goal,
+	ROUND(AVG(away_team_goal),2) AS avg_away_team_goal,
+	ROUND(AVG(home_team_goal - away_team_goal),2) AS avg_goal_dif,
+	ROUND(AVG(home_team_goal + away_team_goal),2) AS avg_goals,
+	SUM(home_team_goal + away_team_goal) AS total_goals
 FROM Match
-
 JOIN Country ON Country.id = Match.country_id
-
 JOIN League ON League.id = Match.league_id
-
 LEFT JOIN Team AS home_team ON home_team.team_api_id = Match.home_team_api_id
-
 LEFT JOIN Team AS away_team ON away_team.team_api_id = Match.away_team_api_id
-
 WHERE Country_name IN ('England')
-
 GROUP BY Country_name, League_name, season
-
 HAVING count(DISTINCT stage) &gt; 10
-
 ORDER BY Country_name, League_name, season DESC;
 
 
 
 -- average height and weight of players
-
 SELECT
-
 	CASE
-
-    	WHEN ROUND(height) &lt; 165 THEN 165
-
-        WHEN ROUND(height) &gt; 195 THEN 195
-
-        ELSE ROUND(height) END AS calc_height,
-
-    COUNT(height) AS Distribution,
-
-    ROUND(AVG(PA.avg_overall_rating),2) AS avg_overall_rating,
-
-    ROUND(AVG(PA.avg_potential),2) AS avg_potential,
-
-    ROUND(AVG(weight/2.2046),2) AS weight
-
+		WHEN ROUND(height) &lt; 165 THEN 165
+		WHEN ROUND(height) &gt; 195 THEN 195
+		ELSE ROUND(height) END AS calc_height,
+	COUNT(height) AS Distribution,
+	ROUND(AVG(PA.avg_overall_rating),2) AS avg_overall_rating,
+	ROUND(AVG(PA.avg_potential),2) AS avg_potential,
+	ROUND(AVG(weight/2.2046),2) AS weight
 FROM Player
-
 LEFT JOIN (SELECT 
-
            Player_Attributes.player_api_id, 
-
            avg(Player_Attributes.overall_rating) AS avg_overall_rating,
-
            avg(Player_Attributes.potential) AS avg_potential  
-
            FROM Player_Attributes
-
            GROUP BY Player_Attributes.player_api_id) AS PA ON PA.player_api_id = Player.player_api_id
-
 GROUP BY calc_height
-
 ORDER BY calc_height;</sql><current_tab id="0"/></tab_sql></sqlb_project>
